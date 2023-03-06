@@ -1,0 +1,89 @@
+@charset "UTF-8";
+
+.header {
+	/* border: 1px solid black; */
+}
+
+.body {
+	margin-top: 100px;
+	/* border: 1px solid black; */
+}
+
+.body_menu {
+	/* border: 1px solid black; */
+}
+
+.body_boardM {
+	/* border: 1px solid black; */
+}
+
+.boardM_write {
+	
+}
+
+.boardM_table {
+	/* border: 1px solid black; */
+
+}
+
+.text_overflow {
+	overflow:hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	width: 250px;
+	/* border: 1px solid black; */
+}
+.title_overflow {
+	overflow:hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	width:150;
+}
+.wid60 {
+	width: 60px;
+	text-align: center;
+}
+
+.wid100 {
+	width: 100px;
+	text-align: center;
+}
+
+.wid180 {
+	width: 180px;
+	text-align: center;
+}
+.wid180_left {
+	width: 180px;
+	text-align: left;
+}
+.wid350 {
+	width: 350px;
+	text-align: center;
+}
+.wid350_left {
+	width: 350px;
+	text-align: left;
+}
+.boardStyle {
+	/* border: 1px solid black; */
+}
+.boardStyle1 {
+	/* border: 1px solid red; */
+}
+.boardStyle  tr{
+	border: 1px solid black;
+	margin-left: 10px;
+}
+.boardStyle1 tr {
+	border: 1px solid black;
+}
+.tr {
+	height: 50px;
+}
+
+.trJ {
+	height: 30px;
+}
+
+

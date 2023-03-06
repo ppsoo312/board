@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="member">
+	
+	<!-- 회원가입 체크 -->
+	<insert id="join" parameterType="member">
+		insert into member(member_seq, id, password, name, tel) values(member_seq.nextval, #{id}, #{password}, #{name}, #{tel})
+	</insert>
+	
+	<select id="login" parameterType="member" resultType="member">
+		select * from member where id=#{id} and password=#{password}
+	</select>
+	
+	
+	
+</mapper>

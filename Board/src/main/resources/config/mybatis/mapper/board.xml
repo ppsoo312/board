@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="board">
+
+	<!-- 멤버 보드 관련 -->
+	
+	<!-- 맴버보드에 글 등록 -->
+	<insert id="boardMInsert" parameterType="memberBoard">
+		insert into member_comm values(member_comm_seq.nextval
+		, #{member_seq}, #{title}, #{content}, sysdate)
+	</insert>
+	
+	<!-- 전체 멤버보드 글 가져오기 -->
+	<select id="boardMSelect" resultType="Map" parameterType="paging">
+		SELECT * FROM (SELECT rownum rownum1 , member_comm_seq, title, content
+		, to_char(current_date1, 'yyyy-mm-dd') current_date ,id FROM 
+		(SELECT c.member_comm_seq member_comm_seq, c.title title
+		, c.content content, c.current_date current_date1
+		, m.id id from member_comm c JOIN member m on 
+		c.member_seq = m.member_seq order by current_date1 DESC)) 
+		WHERE rownum1 BETWEEN #{startIndex} AND #{pageSize} + #{startIndex} - 1
+	</select>
+	
+<!-- 		select rownum rownum2, member_comm_seq, title, content, to_char(current_date1, 'yyyy-mm-dd') current_date, id from (select rownum rownum1, c.member_comm_seq member_comm_seq, c.title title
+		, c.content content, c.current_date current_date1
+		, m.id id from member_comm c JOIN member m on c.member_seq = m.member_seq order by current_date1 desc)
+		where rownum1 BETWEEN #{startIndex} AND #{pageSize} + #{startIndex} - 1 -->
+		
+	<!-- 멤버보드 디테일 가져오기 -->
+	<select id="selectDetail" parameterType="int" resultType="Map">
+		select c.member_comm_seq member_comm_seq, c.member_seq member_seq, c.title title
+		, c.content content, c.current_date current_date
+		, m.id id from member_comm c JOIN member m on c.member_seq = m.member_seq where c.member_comm_seq=#{member_comm_seq}
+	</select>
+	
+	<!-- boardM 전체 개수 구하기 -->
+	<select id="totalBoard" resultType="Integer">
+		select count(*) from member_comm
+	</select>
+	
+	<!-- 익명 보드 관련 -->
+	
+	<!-- boardA 전체 개수 구하기 -->
+	<select id="totalABoard" resultType="Integer">
+		select count(*) from anonym_comm
+	</select>
+	
+	<select id="boardASelect" resultType="Map" parameterType="paging">
+select * from (select rownum rownum1, anonym_comm_seq, a_name, a_password, a_title, a_content
+			, to_char(a_current_date1, 'yyyy-mm-dd') a_current_date from 
+			(SELECT anonym_comm_seq, a_name, a_password, a_title, a_content, a_current_date a_current_date1 FROM 
+			anonym_comm ORDER BY a_current_date1 DESC)) where rownum1 BETWEEN #{startIndex} AND #{pageSize} + #{startIndex} - 1
+	</select>
+	
+	<!-- 익명 보드 글쓰기 -->
+	<insert id="boardAInsert" parameterType="anonymBoard">
+		insert into anonym_comm values(anonym_comm_seq.nextval, #{a_name}, #{a_password}, #{a_title}
+		, #{a_content}, sysdate)
+	</insert>
+	
+	<!-- 익명 보드 디테일 가져오기 -->
+	<select id="selectDetail1" parameterType="int" resultType="Map">
+		select * from anonym_comm where anonym_comm_seq = #{anonym_comm_seq}
+	</select>
+	
+	<!-- 익명 게시판 게시글 비밀번호 확인 -->
+	<select id="passwordClear" parameterType="passwordClear" resultType="Integer">
+		select * from anonym_comm where anonym_comm_seq = #{anonym_comm_seq} and a_password = #{passwordClear}
+	</select>
+	
+	<!-- 익명 게시물 변경 -->
+	<update id="changeA" parameterType="anonymBoard">
+		update anonym_comm set a_name = #{a_name}, a_title=#{a_title}, a_content=#{a_content}
+			where anonym_comm_seq = #{anonym_comm_seq}
+	</update>
+	
+	<!-- 멤버 게시물 변경 -->
+	<update id="changeM" parameterType="MemberBoard">
+		update member_comm set title=#{title}, content=#{content}
+			where member_comm_seq = #{member_comm_seq}
+	</update>
+	
+	<!-- 멤버 게시물 이름 전체 검색 개수 -->
+	<select id="totalIdSel" resultType="int" parameterType="String"> 
+		SELECT count(*) FROM member_comm WHERE MEMBER_SEQ IN (SELECT member_seq FROM MEMBER WHERE id LIKE '%'||#{text}||'%')
+	</select>
+	
+	<select id="boardMIdSelect" resultType="Map" parameterType="paging">
+		SELECT rownum1, member_comm_seq, title, content, to_char(current_date1, 'yyyy-mm-dd') current_date, id FROM 
+			(SELECT rownum rownum1, member_comm_seq, title, content, current_date1, id FROM 
+				(SELECT c.member_comm_seq member_comm_seq, c.title title, c.content content, c.current_date current_date1, m.id id FROM 
+			member_comm c join member m on c.member_seq = m.member_seq 
+			WHERE c.MEMBER_SEQ IN (SELECT member_seq FROM MEMBER WHERE id LIKE '%'||#{text}||'%') order by current_date1 desc)) 
+				WHERE rownum1 BETWEEN #{startIndex} AND #{pageSize} + #{startIndex} - 1
+	</select>
+	
+	<select id="boardMTitleSelect" resultType="Map" parameterType="paging">
+		SELECT rownum1, member_comm_seq, title, content, to_char(current_date1, 'yyyy-mm-dd') current_date, id FROM 
+	(SELECT rownum rownum1, c.member_comm_seq member_comm_seq, c.title title, c.content content, c.current_date current_date1, m.id id FROM 
+	member_comm c join member m on c.member_seq = m.member_seq WHERE title LIKE '%'||#{text}||'%' order by current_date1 desc) 
+		WHERE rownum1 BETWEEN #{startIndex} AND #{pageSize} + #{startIndex} - 1
+	</select>
+	
+	<!-- 멤버 리스트 날짜 검색 -->
+	<select id="dateSearch" resultType="Map" parameterType="dateS">
+		SELECT rownum rownum1, member_comm_seq, member_seq, title, content, current_date1 current_date, id FROM
+			(SELECT m.member_comm_seq member_comm_seq, m.member_seq member_seq, m.title title, m.content content, 
+				TO_CHAR(m."CURRENT_DATE", 'yyyy-mm-dd') current_date1, mem.id id FROM 
+			MEMBER_COMM m join member mem on m.member_seq = mem.member_seq and 
+				TO_CHAR(m."CURRENT_DATE", 'yyyy-mm-dd') >= #{start} and TO_CHAR(m."CURRENT_DATE", 'yyyy-mm-dd') <![CDATA[ <= ]]> #{end} ORDER BY m."CURRENT_DATE")
+	</select>
+	
+	<!-- 익명 보드 이름 검색 개수 -->
+	<select id="totalANameSel" parameterType="String" resultType="int">
+		select count(*) from anonym_comm where a_name LIKE '%'||#{text}||'%'
+	</select>
+	
+	<!-- 익명 보드 이름 검색 페이징 -->
+	<select id="boardANameSelect" parameterType="paging" resultType="Map">
+		select * from (SELECT rownum rownum1, anonym_comm_seq, a_name, a_password, a_title, a_content, to_char(A_CURRENT_DATE, 'yyyy-mm-dd') current_date FROM 
+	(select * from anonym_comm where a_name LIKE '%'||#{text}||'%' ORDER BY A_CURRENT_DATE DESC)) WHERE rownum1 BETWEEN #{startIndex} AND #{pageSize} + #{startIndex} - 1
+	</select>
+	
+	<!-- 익명 보드 이름 검색 페이징 -->
+	<select id="boardATitleSelect" parameterType="paging" resultType="Map">
+		select * from (SELECT rownum rownum1, anonym_comm_seq, a_name, a_password, a_title, a_content, to_char(A_CURRENT_DATE, 'yyyy-mm-dd') current_date FROM 
+	(select * from anonym_comm where a_title LIKE '%'||#{text}||'%' ORDER BY A_CURRENT_DATE DESC)) WHERE rownum1 BETWEEN #{startIndex} AND #{pageSize} + #{startIndex} - 1
+	</select>
+	
+	<!-- 익명 리스트 날짜 검색 -->
+	<select id="dateASearch" resultType="Map" parameterType="dateS">
+	select rownum rownum1, anonym_comm_seq, a_name, a_password, a_title, a_content, current_date1 current_date from (select anonym_comm_seq, a_name, a_password, a_title, a_content, TO_CHAR(a_current_date, 'YYYY-MM-DD') current_date1 from anonym_comm
+	WHERE TO_CHAR(A_CURRENT_DATE, 'yyyy-mm-dd') >= #{start} and TO_CHAR(A_CURRENT_DATE, 'yyyy-mm-dd') <![CDATA[ <= ]]> #{end} ORDER BY A_CURRENT_DATE)
+	</select>
+	
+	<!-- 멤버게시글 삭제 -->
+	<delete id="deleteM" parameterType="int">
+		delete from member_comm where member_comm_seq = #{seq}
+	</delete>
+	
+	<!-- 익명게시글 삭제 -->
+	<delete id="deleteA" parameterType="int">
+		delete from anonym_comm where anonym_comm_seq = #{seq}
+	</delete>
+	
+	
+	<!-- 멤버 삭제 시 관련 멤버 게시글 삭제-->
+	<delete id="memberSeqDelete" parameterType="int">
+		delete from member_comm where member_seq = #{member_seq}
+		
+	</delete>            
+	<!-- 멤버 삭제 -->
+	<delete id="memberDelete" parameterType="int">
+		delete from member where member_seq = #{member_seq}
+		
+	</delete>            
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
