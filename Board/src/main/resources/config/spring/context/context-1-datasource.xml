@@ -22,6 +22,9 @@
 		<property name="password" value="${jdbc.password}"/>
 		<property name="defaultAutoCommit" value="false"/>
 		<property name="maxTotal" value="10"/>
-	</bean>	
+	</bean>
+	
+		
+	
 			
 </beans>

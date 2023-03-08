@@ -240,7 +240,7 @@ $(document).ready(function(){
 		$(".boardA_password").data("kendoDialog").open();
 	});
 	
-	
+	// 비밀번호 검사하기
 	$(document).on("click", '#passCheck', function(){
 		
 		$(".boardA_password").data("kendoDialog").close();
@@ -309,7 +309,7 @@ $(document).ready(function(){
 	
 	
 	
-	
+	// 검색 최신, 아이디, 제목, 날짜 검색
 	$(document).on("change", '#select1', function(){
 		
 		$('#search1').remove();
@@ -389,7 +389,7 @@ $(document).ready(function(){
 	});
 	
 	
-	// select 버튼 클릭 시
+	// 검색 버튼 클릭 시
 	$(document).on("click", '#searchBtn1', function(){
 		
 		let text = $('#search1').val();
@@ -549,7 +549,7 @@ $(document).ready(function(){
 		themeColor: "primary",
 		enable: true
 	});
-	
+	// 익명 게시판 페이징 버튼 클릭 시
 	$(document).on("click", 'a[name=paging_btn1]', function(){
 		
 		let page = $(this).text();
@@ -608,19 +608,11 @@ $(document).ready(function(){
         themeColor: "primary",
         enable: true
     });
-
-	// 멤버게시판 익명 게시판 버튼 클릭 시
+	
 	$(document).on("click", '#boardM', function(){
 		// 로그인
-		if($('#getId').val() != ""){
-			$('.body_boardM').show();
-			$('.body_boardA').hide();
-			location.href = "/board";
-		// 비 로그인
-		} else {
-			alert("멤버 게시판은 로그인 후 이용 가능합니다.");
-			$('#loginBtn').trigger("click");
-		}
+		alert("로그인해야만 입장가능합니다.");
+		location.href="/board/boardC/boardM";
 	});
 	
 	// 회원탈퇴
@@ -705,7 +697,7 @@ $(document).ready(function(){
 	
 			
 	
-	// 자세히 보기 클릭 부분
+	
 	$("button[name=detail]").kendoButton({
 		themeColor: "primary",
         enable: true
@@ -720,7 +712,7 @@ $(document).ready(function(){
 	"<input type='button' value='삭제' id='detail_delete'>" +
 	"<input type='button' value='취소' id='detail_reset'></td></tr></table>";
 	
-	
+	// 자세히 보기 클릭 부분
 	$(document).on("click", "button[name=detail]", function(){
 
 		$(".boardM_detail").kendoDialog({	

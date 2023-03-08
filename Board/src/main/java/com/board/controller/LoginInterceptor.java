@@ -28,7 +28,7 @@ public class LoginInterceptor implements HandlerInterceptor{
 				return true;
 			} else if(url.equals("/board/boardC/boardM")) {
 				
-				response.sendRedirect("/board/member/login");
+				response.sendRedirect("/board");
 				return false;
 			} else {
 

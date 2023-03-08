@@ -3,6 +3,8 @@ package com.board.board;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.transaction.annotation.Transactional;
+
 public interface BoardService {
 	
 	// 멤버 보드 글쓰기
@@ -49,4 +51,7 @@ public interface BoardService {
 	public void memberDelete(int member_seq);
 	// 멤버 삭제시 관련 멤버 게시물 삭제
 	public int memberSeqDelete(int member_seq);
+	// 멤버 게시판 멤버 시퀀스로 찾기
+	public int memberSeqSearch(int member_seq);
+	
 }

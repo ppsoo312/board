@@ -9,7 +9,9 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -33,14 +35,16 @@ import comm.ViewPath;
 public class BoardController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(BoardController.class);
+	
 	@Autowired
 	private BoardServiceImpl boardService;
 	
+	// interceptor 확인
 	@RequestMapping("/boardC/boardM")
 	public String boardM() {
 		return ViewPath.MAIN + "home.jsp";
 	}
-	
+	// 멤버 게시물 저장
 	@RequestMapping("/boardC/boardAdd")
 	@ResponseBody
 	public MemberBoardVO boardAdd(@RequestBody MemberBoardVO vo) throws Exception{
@@ -51,7 +55,7 @@ public class BoardController {
 
 		return vo;
 	}
-	
+	// 멤버 게시판 자세히 보기
 	@RequestMapping("/boardC/detail")
 	@ResponseBody
 	public Map<String, Object> detail(@RequestParam(value="mcs", required=false) String mcs, @RequestParam(value="mcs1", required=false) 
@@ -66,7 +70,6 @@ public class BoardController {
 			map = boardService.selectDetail(member_comm_seq);
 			
 			MemberVO vo = (MemberVO) request.getSession().getAttribute("login");
-			
 			
 			if(Integer.parseInt(map.get("MEMBER_SEQ").toString()) == vo.getMember_seq()) {
 				map.put("EQUL", "EQUL");
@@ -84,7 +87,7 @@ public class BoardController {
 		return map;
 	}
 	
-	/** 페이징 처리 **/
+	// 멤버 게시판 페이징 처리
 	@RequestMapping(value="/boardC/paging", method=RequestMethod.POST)
 	@ResponseBody
 	public List<Map<String, Object>> paging(HttpServletRequest request, @RequestParam(defaultValue = "1") int page, PagingVO pvo,
@@ -95,7 +98,7 @@ public class BoardController {
 		PagingUtil pagingUtil = null;
 		int startIndex = 0;
 		int pageSize = 0;
-		
+		// 아이디 찾기
 		if(select == 2) {
 			
 			totalListCnt = boardService.totalIdSel(text);
@@ -112,7 +115,7 @@ public class BoardController {
 			pvo.setPageSize(pageSize);
 			
 			mvo = boardService.boardMIdSelect(pvo);
-
+		// 제목찾기
 		} else if(select == 3) {
 			
 			totalListCnt = boardService.totalIdSel(text);
@@ -130,7 +133,7 @@ public class BoardController {
 			
 			mvo = boardService.boardMTitleSelect(pvo);
 
-			
+			// 최신 찾기
 		} else {
 			
 			totalListCnt = boardService.totalBoard();
@@ -154,7 +157,7 @@ public class BoardController {
 		request.setAttribute("pagingUtil", pagingUtil);
 		return mvo;
 	}
-	
+	// 익명 게시물 페이징
 	@RequestMapping(value="/boardC/pagingA", method=RequestMethod.POST)
 	@ResponseBody
 	public List<Map<String, Object>> pagingA(HttpServletRequest request, @RequestParam(defaultValue = "1") int page, PagingVO pvo,
@@ -225,7 +228,7 @@ public class BoardController {
 		return mvo;
 	}
 	
-	/** 익명 게시판 글쓰기 **/
+	// 익명 게시판 글쓰기
 	@RequestMapping("/boardC/boardAdd1")
 	@ResponseBody
 	public AnonymBoardVO boardAdd1(@RequestBody AnonymBoardVO vo) {
@@ -234,7 +237,7 @@ public class BoardController {
 		
 		return vo;
 	}
-	
+	// 비밀번호 체크
 	@RequestMapping("/boardC/passClear")
 	@ResponseBody
 	public void passClear(@RequestBody PasswordClearVO vo)  throws Exception {
@@ -242,14 +245,14 @@ public class BoardController {
 		boardService.passwordClear(vo);
 	
 	}
-	
+	// 익명 게시글 수정
 	@RequestMapping("/boardC/changeA")
 	@ResponseBody
 	public void changeA(@RequestBody AnonymBoardVO avo) {
 		
 		boardService.changeA(avo);
 	}
-	
+	// 멤버 게시글 수정
 	@RequestMapping("/boardC/changeM")
 	@ResponseBody
 	public void changeM(@RequestBody MemberBoardVO mvo) {
@@ -257,7 +260,7 @@ public class BoardController {
 		boardService.changeM(mvo);
 	}
 	
-	
+	// 멤버 날짜 찾기
 	@RequestMapping("/boardC/date")
 	@ResponseBody
 	public List<Map<String, Object>> date(@RequestParam("start") String start, @RequestParam("end") String end, DateVO vo){
@@ -269,7 +272,7 @@ public class BoardController {
 		
 		return map;
 	}
-	
+	// 익명 날짜 찾기
 	@RequestMapping("/boardC/dateA")
 	@ResponseBody
 	public List<Map<String, Object>> dateA(@RequestParam("start") String start, @RequestParam("end") String end, DateVO vo){
@@ -280,26 +283,25 @@ public class BoardController {
 		
 		return map;
 	}
-	
+	// 게시물 삭제
 	@RequestMapping("/boardC/delete")
 	@ResponseBody
 	public void delete(@RequestParam("seq") int seq, @RequestParam("is") int is) {
 		
 
-		if(is == 1) {
-			boardService.delete(seq, is);
-		} else {
-			boardService.delete(seq, is);
-		}
+		boardService.delete(seq, is);
 	}
-	
+	// 계정 탈퇴
 	@RequestMapping("/boardC/memberDelete")
+	@Transactional
 	@ResponseBody
 	public void memberDelete(@RequestParam("member_seq") int member_seq) {
 		
-		int su = boardService.memberSeqDelete(member_seq);
+		boardService.memberSeqSearch(member_seq);
 		
-		boardService.memberDelete(member_seq);			
+		boardService.memberDelete(member_seq);		
+		
+		// 트랜잭션 실험 용 boardService.memberSeqDelete(member_seq);
 		
 	}
 	

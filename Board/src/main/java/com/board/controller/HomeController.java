@@ -11,6 +11,9 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,8 +36,10 @@ public class HomeController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 	
+	
 	@Autowired
 	private BoardServiceImpl boardService;
+	
 	
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String home(Locale locale, Model model, HttpServletRequest request, @RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "1") int page1, PagingVO pvo, PagingVO pvo1) {
@@ -52,8 +57,8 @@ public class HomeController {
 	    
 	    pvo.setStartIndex(startIndex);
 	    pvo.setPageSize(pageSize);
-		
-		List<Map<String, Object>> mvo = boardService.boardMSelect(pvo);
+	    
+	    List<Map<String, Object>> mvo = boardService.boardMSelect(pvo);
 		
 		/** 익명 보드 관련 **/
 		int totalListCnt1 = boardService.totalABoard();

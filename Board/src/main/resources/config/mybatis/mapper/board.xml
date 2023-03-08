@@ -155,7 +155,11 @@ select * from (select rownum rownum1, anonym_comm_seq, a_name, a_password, a_tit
 	<delete id="memberDelete" parameterType="int">
 		delete from member where member_seq = #{member_seq}
 		
-	</delete>            
+	</delete>        
+	<!-- 멤버 게시글 멤버 시퀀스로 접근하기 -->    
+	<select id="memberSeqSearch" parameterType="int" resultType="int">
+		select member_comm_seq from member_comm where member_seq = #{member_seq}
+	</select>
 </mapper>
 
 

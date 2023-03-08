@@ -6,6 +6,7 @@ import java.util.Map;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Repository("boardDAO")
 public class BoardDAOImpl implements BoardDAO{
@@ -16,7 +17,6 @@ public class BoardDAOImpl implements BoardDAO{
 	public void setBoardDao(SqlSession sqlSession) {
 		this.sqlSession = sqlSession;
 	}
-	
 	
 	@Override
 	public int boardMInsert(MemberBoardVO vo) {
@@ -131,6 +131,11 @@ public class BoardDAOImpl implements BoardDAO{
 	@Override
 	public int memberSeqDelete(int member_seq) {
 		return sqlSession.delete("board.memberSeqDelete", member_seq);
+	}
+	
+	@Override
+	public int memberSeqSearch(int member_seq) {
+		return sqlSession.selectOne("board.memberSeqSearch", member_seq);
 	}
 
 	

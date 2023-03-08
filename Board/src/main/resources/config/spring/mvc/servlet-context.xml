@@ -40,14 +40,45 @@
 	
 	<!-- Enables the Spring MVC @Controller programming model -->
 	<!-- <annotation-driven /> -->
-	<mvc:annotation-driven />
-	
+	<!-- <mvc:annotation-driven /> -->
+	<tx:annotation-driven />
 	<!-- 트랜젝션 관리 -->
-	<!-- <beans:bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-		<beans:property name="dataSource" ref="dataSource" />
+	<tx:annotation-driven transaction-manager="transactionManager"/>
+	<beans:bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<beans:property name="dataSource" ref="ds" />
 	</beans:bean>
 	
-	트랜잭션을 관리할 메소드 및 속성 지정
+   <!-- 트랜잭션 설정 -->
+   <!-- <context:component-scan base-package="com.board.controller" use-default-filters="false">
+    	<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller" />
+	</context:component-scan>
+   <context:component-scan base-package="com.board.board" use-default-filters="false">
+		<context:include-filter type="annotation" expression="org.springframework.stereotype.Service"/>
+		<context:include-filter type="annotation" expression="org.springframework.stereotype.Repository"/>
+	</context:component-scan> -->
+	
+	
+	
+	<!-- <tx:advice id="txAdvice" transaction-manager="transactionManager">
+		<tx:attributes>
+			<tx:method name="count*" read-only="true" rollback-for="Exception" propagation="REQUIRED" isolation="READ_COMMITTED"/>
+			<tx:method name="get*" read-only="true" rollback-for="Exception" propagation="REQUIRED" isolation="READ_COMMITTED"/>
+			<tx:method name="insert*" rollback-for="Exception" propagation="REQUIRED" isolation="READ_COMMITTED"/>
+			<tx:method name="increase*" rollback-for="Exception" propagation="REQUIRED" isolation="READ_COMMITTED"/>
+			<tx:method name="delete*" rollback-for="Exception" propagation="REQUIRED" isolation="READ_COMMITTED"/>
+			<tx:method name="update*" rollback-for="Exception" propagation="REQUIRED" isolation="READ_COMMITTED"/>
+		</tx:attributes>
+	</tx:advice> -->
+	
+	<!-- 여기 있는 메서드에 트랜잭션 설정을 해주세요 -->
+	<!-- 현재는 serviceImpl에 있는 메서드에 트랜잭션 설정이 걸려있다. -->
+	<!-- 따라서  servuceImpl수준에서 발생한 Exception에 대해서 rollback하게 된다. -->
+	<!-- <aop:config>
+		<aop:pointcut expression="execution(* com.board.board.BoardServiceImpl.*(..))" id="serviceMethod"/>
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="serviceMethod" id="transactionAdvisor"/>
+	</aop:config> -->
+	
+	<!-- 트랜잭션을 관리할 메소드 및 속성 지정
 	<tx:advice id="transactionAdvice" transaction-manager="transcationManager">
 		<tx:attributes>
 			<tx:method name="*" rollback-for="Exception"/>

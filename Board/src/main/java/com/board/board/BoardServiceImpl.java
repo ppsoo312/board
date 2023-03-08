@@ -6,12 +6,21 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Primary;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import com.board.utils.PagingUtil;
 
+
 @Service("boardService")
 public class BoardServiceImpl implements BoardService{
+	
 
 	@Autowired
 	private BoardDAOImpl boardDao;
@@ -20,9 +29,10 @@ public class BoardServiceImpl implements BoardService{
 		this.boardDao = boardDao;
 	}
 	
+	
 	@Override
-	public int boardMInsert(MemberBoardVO vo) {
-		return boardDao.boardMInsert(vo);
+	public int boardMInsert(MemberBoardVO vo) {	
+		return boardDao.boardMInsert(vo);	
 	}
 	
 	// 없앨 예정
@@ -127,8 +137,13 @@ public class BoardServiceImpl implements BoardService{
 	}
 	
 	@Override
-	public int memberSeqDelete(int member_seq) {
+	public int memberSeqDelete(int member_seq) {	
 		return boardDao.memberSeqDelete(member_seq);
+	}
+	
+	@Override
+	public int memberSeqSearch(int member_seq) {
+		return boardDao.memberSeqSearch(member_seq);
 	}
 	
 

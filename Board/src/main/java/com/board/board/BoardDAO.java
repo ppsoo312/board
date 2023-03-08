@@ -27,4 +27,5 @@ public interface BoardDAO {
 	public void delete(int seq, int is);
 	public void memberDelete(int member_seq);
 	public int memberSeqDelete(int member_seq);
+	public int memberSeqSearch(int member_seq);
 }
