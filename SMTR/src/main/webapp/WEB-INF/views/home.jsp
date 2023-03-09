@@ -10,5 +10,7 @@
 	<%@ include file="layout/header.jsp" %>
 	
 	<%@ include file="main/popularChef.jsp" %>
+	
+	<%@ include file="myPage/saveRecipe.jsp" %>
 </body>
 </html>

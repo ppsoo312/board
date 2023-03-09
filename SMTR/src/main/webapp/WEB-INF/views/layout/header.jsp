@@ -2,11 +2,11 @@
 <header class="navigation fixed-top">
   <div class="container">
     <nav class="navbar navbar-expand-lg navbar-white">
-      <a class="navbar-brand order-1" href="index.html">
-        <img class="img-fluid" width="100px" src="images/logo.png"
+      <a class="navbar-brand order-1" href="index.html" style="padding: 0;height: 100%">
+        <img class="img-fluid" width="100px" src="${pageContext.request.contextPath }/resources/images/smtr_mainRogo.png"
           alt="Reader | Hugo Personal Blog Template">
       </a>
-      <div class="collapse navbar-collapse text-center order-lg-2 order-3" id="navigation">
+      <div class="cen collapse navbar-collapse text-center order-lg-2 order-3" id="navigation" style="padding-left: 100px;">
         <ul class="navbar-nav mx-auto">
           <li class="nav-item dropdown">
             <a class="nav-link" href="#" role="button" data-toggle="dropdown" aria-haspopup="true"
@@ -87,6 +87,9 @@
             <a class="nav-link" href="shop.html">Shop</a>
           </li>
         </ul>
+       <div class="loginDiv">
+       		<button class="loginBtn" type="button" onclick="location.href='${pageContext.request.contextPath}/login/loginForm'"><img class="btnImg" src="${pageContext.request.contextPath }/resources/images/loginBtn.png"></button>
+       </div>      
       </div>
 
       <div class="order-2 order-lg-3 d-flex align-items-center">

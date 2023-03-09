@@ -190,6 +190,10 @@ mark {
   padding-top: 1px;
   padding-bottom: 1px;
 }
+.section-sm2 {
+  margin-top: 150px;
+  padding-bottom: 1px;
+}
 .section-title {
   position: relative;
   text-transform: uppercase;
@@ -349,8 +353,21 @@ mark {
     padding: 10px;
   }
 }
-
+.cen {
+	position: relative;
+    top: 50px;
+}
+.loginBtn {
+	background:none;
+	border: none;
+	width: 80px;
+	height: 80px;
+}
+.btnImg {
+	width: 150px;
+}
 .navbar {
+  height: 100px;
   padding: 0;
 }
 .navbar .dropdown:hover .dropdown-menu {
@@ -409,6 +426,14 @@ mark {
 .search-bar {
   position: relative;
   background-color: #F9F9F9;
+}
+.loginDiv {
+	position: relative;
+    top: -40px;
+	padding-left: 100px;
+	padding-top: 20px;
+ 	padding-bottom: 20px;
+	float: right;
 }
 .search-bar input {
   background-color: transparent;
